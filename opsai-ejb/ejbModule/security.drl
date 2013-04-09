@@ -1,0 +1,51 @@
+package Permissions;
+
+import java.security.Principal;
+
+import org.jboss.seam.security.permission.PermissionCheck;
+import org.jboss.seam.security.Role;
+import com.webmd.opsai.entity.*;
+
+rule "DQLStudioUser"
+when
+	c: PermissionCheck(name == "dql", action == "read");
+	Role(name == "TechOpsSRE") ||
+	Role(name == "CMS Management Consumer - OPS") || Role(name == "CMS Management Professional - OPS") ||
+	Role(name == "CMS Management Consumer - EA") || Role(name == "CMS Management Professional - EA") ||
+	Role(name == "CMS Management Professional – PubOps") || Role(name == "CMS Management Professional - Editorial") ||
+	Role(name == "CMS Management Consumer - Programming") || Role(name == "CMS Management Professional - PubAdmin") ||
+	Role(name == "CMS Management Consumer - DEV") || Role(name == "CMS Management Professional - DEV") ||
+	Role(name == "CMS Management Consumer - QA") || Role(name == "CMS Management Professional - QA");
+then
+	c.grant();
+end;
+
+rule CanControlHosttype
+when
+	c: PermissionCheck(name == "hosttype", action == "control");
+	Role(name == "TechOpsSRE") ||
+	Role(name == "CMS Management Consumer - OPS") || Role(name == "CMS Management Professional - OPS") ||
+	Role(name == "CMS Management Consumer - DEV") || Role(name == "CMS Management Professional - DEV") ||
+	Role(name == "CMS Management Consumer - QA") || Role(name == "CMS Management Professional - QA");
+then
+	c.grant();
+end;
+
+rule BusinessEntityCheck
+when
+	c: PermissionCheck(name == "businessentity", action == "control");
+	$beName: String();
+	Role(name == "TechOpsSRE") ||
+	Role(name == ("CMS Management " + $beName + " - DEV")) || Role(name == ("CMS Management " + $beName + " - QA")) || Role(name == ("CMS Management " + $beName + " - OPS"));
+then
+	c.grant();
+end;
+
+rule EnvironmentCheck
+when
+	c: PermissionCheck(name == "environemnt", env: action);
+	Role(name == "TechOpsSRE") ||
+	Role(name == ("CMS Management " + env)) || Role(name == "CMS Management Consumer - OPS") || Role(name == "CMS Management Professional - OPS");
+then
+	c.grant();
+end;

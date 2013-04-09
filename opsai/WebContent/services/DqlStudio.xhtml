@@ -1,0 +1,62 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j" 
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    <style>
+        .center{
+            text-align:center;
+        }
+    </style>
+    <h:form id="form"> 
+	    <rich:simpleTogglePanel label="Scspubevent Search Filter" switchType="ajax">
+	     	<s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">Doc Base: </ui:define>
+                <h:selectOneMenu value="#{dqlstudio.docBase}">
+	                <f:selectItem itemValue="meddoc01" itemLabel="meddoc01"/>
+	                <f:selectItem itemValue="webmddoc01" itemLabel="webmddoc01"/>
+	            </h:selectOneMenu>  
+	        </s:decorate>
+			<s:decorate template="/layout/edit.xhtml">
+                <ui:define name="label">Query: </ui:define>
+                <h:inputTextarea value="#{dqlstudio.queryStr}" rows="5" cols="100" style="font-size:120%;">
+				</h:inputTextarea>
+	        </s:decorate>
+		</rich:simpleTogglePanel>  
+		<div class="actionButtons">
+        	<a4j:commandButton action="#{dqlstudio.query}" reRender="results" value="Execute"/>
+            <h:commandButton value="Export to spreadsheet" action="#{excelExporter.export('dqlForm:dqlTable')}"/>
+        </div>      
+	</h:form>
+	<a4j:outputPanel id="results"> 
+    <h:form id ="dqlForm">
+        <rich:dataTable value="#{dqlstudio.resultCollection}" var="col" width="300px" columnClasses="center" footerClass="center"
+        rows="15" reRender="ds" id="dqlTable">
+            <f:facet name="header">
+                <h:outputText value="DQL Result"/>
+            </f:facet>
+            <rich:columns value="#{dqlstudio.columns}" var="columnHeader" index="ind">
+            	<f:facet name="header">
+                    <h:outputText value="#{columnHeader}"/>
+                </f:facet>
+                <h:outputText value="#{col[ind]}"/>
+            </rich:columns>
+			<f:facet name="footer">
+                <rich:datascroller id="ds"></rich:datascroller>
+            </f:facet>
+        </rich:dataTable>
+    </h:form>
+    
+    </a4j:outputPanel>
+    
+</ui:define>
+
+</ui:composition>
+

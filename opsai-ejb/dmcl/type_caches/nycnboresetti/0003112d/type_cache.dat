@@ -1,0 +1,217 @@
+1.0
+OBJ TYPE_CACHE_FILE_HEADER_TYPE 3
+xxx Mar 12 10:30:26 2012
+A 68 5.3.0.622 SP6 Win32/6.5.0.308 SP2P0300 Linux.Oracle/1 (1513,7636632)
+A 5 UTF-8
+0
+<TYPE>
+TYPE dm_type 0303112d80000001
+ NULL 
+15
+  name  STRING S 27
+  super_name  STRING S 40
+  attr_count  INT S 0
+  start_pos  INT S 0
+  owner  STRING S 40
+  s_index_attr  ID S 0
+  r_index_attr  ID S 0
+  info  ID S 0
+  attr_name  STRING R 40
+  attr_type  INT R 0
+  attr_repeating  BOOL R 0
+  attr_length  INT R 0
+  views_valid  BOOL S 0
+  unique_tag  INT S 0
+  i_vstamp  INT S 0
+
+<TYPE>
+TYPE dmi_type_info 0303112d80000007
+ NULL 
+19
+  r_type_id  ID S 0
+  r_type_name  STRING S 27
+  default_storage  ID S 0
+  default_owner_permit  INT S 0
+  default_group_permit  INT S 0
+  default_world_permit  INT S 0
+  default_group  STRING S 27
+  r_supertype  STRING R 27
+  acl_domain  STRING S 32
+  acl_name  STRING S 32
+  ftindex_attrs  STRING R 27
+  r_orig_declaration  BOOL R 0
+  locally_managed  BOOL R 0
+  type_override  ID S 0
+  i_type_features  INT S 0
+  type_version  INT S 0
+  default_aspects  STRING R 255
+  type_cache_vstamp  INT S 0
+  i_vstamp  INT S 0
+
+<TYPE>
+TYPE dm_acl 0303112d80000101
+ NULL 
+21
+  object_name  STRING S 32
+  description  STRING S 128
+  owner_name  STRING S 32
+  r_is_internal  BOOL S 0
+  r_accessor_name  STRING R 32
+  r_accessor_permit  INT R 0
+  r_accessor_xpermit  INT R 0
+  r_is_group  BOOL R 0
+  globally_managed  BOOL S 0
+  acl_class  INT S 0
+  r_has_events  BOOL S 0
+  r_permit_type  INT R 0
+  r_application_permit  STRING R 128
+  i_has_required_groups  BOOL S 0
+  i_has_required_group_set  BOOL S 0
+  i_has_access_restrictions  BOOL S 0
+  r_template_id  ID S 0
+  r_alias_set_id  ID S 0
+  i_partition  INT S 0
+  i_is_replica  BOOL S 0
+  i_vstamp  INT S 0
+
+<TYPE>
+TYPE dm_sysobject 0303112d80000105
+ NULL 
+86
+  object_name  STRING S 255
+  r_object_type  STRING S 32
+  title  STRING S 400
+  subject  STRING S 192
+  authors  STRING R 48
+  keywords  STRING R 48
+  a_application_type  STRING S 32
+  a_status  STRING S 16
+  r_creation_date  TIME S 0
+  r_modify_date  TIME S 0
+  r_modifier  STRING S 32
+  r_access_date  TIME S 0
+  a_is_hidden  BOOL S 0
+  i_is_deleted  BOOL S 0
+  a_retention_date  TIME S 0
+  a_archive  BOOL S 0
+  a_compound_architecture  STRING S 16
+  a_link_resolved  BOOL S 0
+  i_reference_cnt  INT S 0
+  i_has_folder  BOOL S 0
+  i_folder_id  ID R 0
+  r_composite_id  ID R 0
+  r_composite_label  STRING R 32
+  r_component_label  STRING R 32
+  r_order_no  INT R 0
+  r_link_cnt  INT S 0
+  r_link_high_cnt  INT S 0
+  r_assembled_from_id  ID S 0
+  r_frzn_assembly_cnt  INT S 0
+  r_has_frzn_assembly  BOOL S 0
+  resolution_label  STRING S 32
+  r_is_virtual_doc  INT S 0
+  i_contents_id  ID S 0
+  a_content_type  STRING S 32
+  r_page_cnt  INT S 0
+  r_content_size  INT S 0
+  a_full_text  BOOL S 0
+  a_storage_type  STRING S 32
+  i_cabinet_id  ID S 0
+  owner_name  STRING S 32
+  owner_permit  INT S 0
+  group_name  STRING S 32
+  group_permit  INT S 0
+  world_permit  INT S 0
+  i_antecedent_id  ID S 0
+  i_chronicle_id  ID S 0
+  i_latest_flag  BOOL S 0
+  r_lock_owner  STRING S 32
+  r_lock_date  TIME S 0
+  r_lock_machine  STRING S 80
+  log_entry  STRING S 120
+  r_version_label  STRING R 32
+  i_branch_cnt  INT S 0
+  i_direct_dsc  BOOL S 0
+  r_immutable_flag  BOOL S 0
+  r_frozen_flag  BOOL S 0
+  r_has_events  BOOL S 0
+  acl_domain  STRING S 32
+  acl_name  STRING S 32
+  a_special_app  STRING S 32
+  i_is_reference  BOOL S 0
+  r_creator_name  STRING S 32
+  r_is_public  BOOL S 0
+  r_policy_id  ID S 0
+  r_resume_state  INT S 0
+  r_current_state  INT S 0
+  r_alias_set_id  ID S 0
+  a_effective_date  TIME R 0
+  a_expiration_date  TIME R 0
+  a_publish_formats  STRING R 32
+  a_effective_label  STRING R 32
+  a_effective_flag  STRING R 8
+  a_category  STRING S 64
+  language_code  STRING S 5
+  a_is_template  BOOL S 0
+  a_controlling_app  STRING S 32
+  r_full_content_size  DOUBLE S 0
+  a_extended_properties  STRING R 32
+  a_is_signed  BOOL S 0
+  a_last_review_date  TIME S 0
+  i_retain_until  TIME S 0
+  r_aspect_name  STRING R 64
+  i_retainer_id  ID R 0
+  i_partition  INT S 0
+  i_is_replica  BOOL S 0
+  i_vstamp  INT S 0
+
+<TYPE>
+TYPE dm_docbase_config 0303112d8000011c
+dm_sysobject
+43
+  r_dbms_name  STRING S 32
+  mac_access_protocol  STRING S 32
+  security_mode  STRING S 32
+  auth_protocol  STRING S 32
+  index_store  STRING S 80
+  r_docbase_id  INT S 0
+  r_address_partitions  INT S 0
+  r_starting_partition  INT S 0
+  r_ending_partition  INT S 0
+  folder_security  BOOL S 0
+  effective_date  TIME S 0
+  r_federation_name  STRING S 120
+  a_bpaction_run_as  STRING S 32
+  richmedia_enabled  BOOL S 0
+  dd_locales  STRING R 5
+  default_app_permit  INT S 0
+  oldest_client_version  STRING S 32
+  max_auth_attempt  INT S 0
+  i_crypto_key  STRING S 255
+  client_pcaching_disabled  BOOL S 0
+  client_pcaching_change  INT S 0
+  fulltext_install_locs  STRING R 32
+  offline_sync_level  INT S 0
+  offline_checkin_flag  INT S 0
+  wf_package_control_enabled  BOOL S 0
+  r_storage_mode  INT S 0
+  macl_security_disabled  BOOL S 0
+  i_ticket_crypto_key  STRING S 255
+  trust_by_default  BOOL S 0
+  trusted_docbases  STRING R 255
+  login_ticket_cutoff  TIME S 0
+  auth_failure_interval  INT S 0
+  auth_deactivation_interval  INT S 0
+  dir_user_sync_on_demand  BOOL S 0
+  r_module_name  STRING R 32
+  r_module_mode  INT R 0
+  check_client_version  BOOL S 0
+  r_normal_tz  INT S 0
+  audit_old_values  BOOL S 0
+  docbase_roles  STRING R 32
+  approved_clients_only  BOOL S 0
+  r_tz_aware  BOOL S 0
+  r_partition_status  BOOL S 0
+
+
+<============>

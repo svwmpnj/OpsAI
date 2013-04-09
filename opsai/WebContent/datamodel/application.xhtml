@@ -1,0 +1,68 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    
+    <h:messages globalOnly="true" styleClass="message"/>
+    
+    <h:form id="applicationForm">
+
+        <rich:panel>
+            <f:facet name="header">application</f:facet>
+    
+            <s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:inputText id="name" required="true"
+                             value="#{applicationHome.instance.name}"/>
+            </s:decorate>
+            <rich:spacer height="40" />
+            <rich:spacer height="40" />
+            <s:decorate id="productDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Product</ui:define>
+                <h:selectOneMenu id="productSelect" required="true"
+                		value="#{applicationHome.instance.product}">
+               		<s:selectItems value="#{productList}" var="product" label="#{product.name} - #{product.businessEntity.name}" noSelectionLabel="Select Product" />
+               		<s:convertEntity />
+               	</h:selectOneMenu>                   
+            </s:decorate>
+			<rich:spacer height="40" />
+			<s:decorate id="hostAliasDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Host Type</ui:define>
+                <h:selectOneMenu id="hostTypeSelect" required="false"
+                		value="#{applicationHome.instance.hostType}">
+               		<s:selectItems value="#{hostTypeList}" var="hostType" label="#{hostType.name} - #{hostType.businessEntity.name}" noSelectionLabel="Select Host Type" />
+               		<s:convertEntity />
+               	</h:selectOneMenu>                   
+            </s:decorate>
+                        
+            <div style="clear:both"/>
+            
+        </rich:panel>
+
+        <div class="actionButtons">
+            <h:commandButton id="create" 
+                          value="Create" 
+                         action="#{applicationHome.persist}"
+                       rendered="#{!applicationHome.managed}"/>                   
+            <h:commandButton id="update" 
+                          value="Update" 
+                         action="#{applicationHome.update}"
+                       rendered="#{applicationHome.managed}"/>
+            <s:button id="done" 
+                            value="Done"
+                             view="/datamodel/applicationView.xhtml"/>
+        </div>
+        
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>
+

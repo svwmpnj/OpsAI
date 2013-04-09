@@ -1,0 +1,69 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j" 
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+	<h:form id="selectdate" styleClass="edit">
+	<rich:panel style="overflow:auto;width:940px;">
+		<s:decorate template="/layout/edit.xhtml"> 
+			<ui:define name="label">Select Base Date</ui:define> 
+			<rich:calendar popout="true" value="#{scsPubEventList.scsStartDate}"
+				datePattern="M/dd/yy" defaultTime="00:00" showApplyButton="false" ajaxSingle="false"> 
+			<a4j:support event="onchanged" action="#{scsPubEventList.resetMyChart}" reRender="results"/> 
+			</rich:calendar> 
+		</s:decorate> 
+		<s:decorate template="/layout/edit.xhtml"> 
+			<ui:define name="label">View Option:</ui:define> 
+			<h:selectBooleanCheckbox value="#{scsPubEventList.showX1data}" title="Show Avg Time data">
+				<a4j:support event="onchange" reRender="results"/> 
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Show Avg Time data"/>
+		</s:decorate> 
+	</rich:panel>
+	</h:form>
+	<rich:spacer height="40"/>
+	<a4j:outputPanel id="results">
+	<style>
+		.alignTop {
+			vertical-align:top;
+		}
+	</style>
+	<h:panelGrid columns="2" border="0" columnClasses="alignTop,alignTop,">
+	<h:panelGroup>
+        <rich:panel style="width:465px;">
+        	<f:facet name="header">SCS Publish Event - Consumer, Incremental</f:facet>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.cons1Inc.dataX1Str}|#{scsPubEventList.cons1Inc.dataY1Str}|#{scsPubEventList.cons1Inc.dataX2Str}|#{scsPubEventList.cons1Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.cons1Inc.labelX1Str}1:|0|1|2|3|4|5|6|2:|0|20|40|60|80|100&amp;chds=0,23,0,6,0,23,0,100&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,12,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.cons1Inc.title}" alt="Sample chart"/>
+            <rich:spacer height="40"/>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.cons7Inc.dataX1Str}|#{scsPubEventList.cons7Inc.dataY1Str}|#{scsPubEventList.cons7Inc.dataX2Str}|#{scsPubEventList.cons7Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.cons7Inc.labelX1Str}1:|0|1|2|3|4|5|6|2:|0|20|40|60|80|100&amp;chds=0,6,0,6,0,6,0,100&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,30,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.cons7Inc.title}" alt="Sample chart"/>
+            <rich:spacer height="40"/>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.cons105Inc.dataX1Str}|#{scsPubEventList.cons105Inc.dataY1Str}|#{scsPubEventList.cons105Inc.dataX2Str}|#{scsPubEventList.cons105Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.cons105Inc.labelX1Str}1:|0|1|2|3|4|5|6|2:|0|100|200|300|400|500&amp;chds=0,14,0,6,0,14,0,500&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,15,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.cons105Inc.title}" alt="Sample chart"/>
+            <rich:spacer height="40"/>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.boots1Inc.dataX1Str}|#{scsPubEventList.boots1Inc.dataY1Str}|#{scsPubEventList.boots1Inc.dataX2Str}|#{scsPubEventList.boots1Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.boots1Inc.labelX1Str}1:|0|0.5|1|1.5|2|2:|0|3|6|9|12|15&amp;chds=0,23,0,2,0,23,0,15&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,12,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.boots1Inc.title}" alt="Sample chart"/>
+            <rich:spacer height="40"/>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.boots7Inc.dataX1Str}|#{scsPubEventList.boots7Inc.dataY1Str}|#{scsPubEventList.boots7Inc.dataX2Str}|#{scsPubEventList.boots7Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.boots7Inc.labelX1Str}1:|0|0.5|1|1.5|2|2:|0|3|6|9|12|15&amp;chds=0,6,0,2,0,6,0,15&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,30,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.boots7Inc.title}" alt="Sample chart"/>
+            <rich:spacer height="40"/>
+            <h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.boots105Inc.dataX1Str}|#{scsPubEventList.boots105Inc.dataY1Str}|#{scsPubEventList.boots105Inc.dataX2Str}|#{scsPubEventList.boots105Inc.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.boots105Inc.labelX1Str}1:|0|0.5|1|1.5|2|2:|0|10|20|30|40|50|60&amp;chds=0,14,0,2,0,14,0,60&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,15,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (min)|Avg Obj Counts&amp;chtt=#{scsPubEventList.boots105Inc.title}" alt="Sample chart"/>
+        </rich:panel>
+    </h:panelGroup>
+    <h:panelGroup>
+        <rich:panel style="width:465px;">
+        	<f:facet name="header">SCS Publish Event - Professional, SIP</f:facet>
+			<h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.prof1SIP.dataX1Str}|#{scsPubEventList.prof1SIP.dataY1Str}|#{scsPubEventList.prof1SIP.dataX2Str}|#{scsPubEventList.prof1SIP.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.prof1SIP.labelX1Str}1:|0|4|8|12|16|20|2:|0|1|2|3|4|5&amp;chds=0,23,0,20,0,23,0,5&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,12,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (sec)|Avg Obj Counts&amp;chtt=#{scsPubEventList.prof1SIP.title}" alt="Sample chart"/>
+			<rich:spacer height="40"/>
+			<h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.prof7SIP.dataX1Str}|#{scsPubEventList.prof7SIP.dataY1Str}|#{scsPubEventList.prof7SIP.dataX2Str}|#{scsPubEventList.prof7SIP.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.prof7SIP.labelX1Str}1:|0|2|4|6|8|10|12|2:|0|1|2|3|4|5&amp;chds=0,6,0,12,0,6,0,5&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,30,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (sec)|Avg Obj Counts&amp;chtt=#{scsPubEventList.prof7SIP.title}" alt="Sample chart"/>
+			<rich:spacer height="40"/>
+			<h:graphicImage value="http://chart.apis.google.com/chart?chs=450x250&amp;cht=lxy&amp;chd=t:#{scsPubEventList.prof105SIP.dataX1Str}|#{scsPubEventList.prof105SIP.dataY1Str}|#{scsPubEventList.prof105SIP.dataX2Str}|#{scsPubEventList.prof105SIP.dataY2Str}&amp;chco=0033FF&amp;chxt=x,y,r&amp;chxl=0:#{scsPubEventList.prof105SIP.labelX1Str}1:|0|2|4|6|8|10|12|2:|0|1|2|3|4|5&amp;chds=0,14,0,12,0,14,0,5&amp;chxs=1,FF3300|2,76A4FB&amp;chco=FF3300,76A4FB&amp;chm=o,555555,0,-1,6|v,76A4FB,1,-1,15,-1#{scsPubEventList.dataX1Label}&amp;chls=2,1,0|0,1,0&amp;chdlp=b&amp;chdl=Avg Time (sec)|Avg Obj Counts&amp;chtt=#{scsPubEventList.prof105SIP.title}" alt="Sample chart"/>
+        </rich:panel>
+	</h:panelGroup>
+	</h:panelGrid>
+	</a4j:outputPanel>
+</ui:define>
+
+</ui:composition>

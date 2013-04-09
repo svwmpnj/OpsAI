@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:rich="http://richfaces.ajax4jsf.org/rich">
+<h:form>
+<rich:toolBar>
+    <rich:toolBarGroup>
+    	<s:link view="/home.xhtml" value="OpsAI Home"/>
+    	<rich:dropDownMenu>
+			<f:facet name="label">
+				<h:panelGroup>
+					<rich:spacer style="width:1px;height:16px;" styleClass="pic"/>
+					<h:outputText value="OpsAI Tool" />
+				</h:panelGroup>
+			</f:facet>
+            <rich:menuItem submitMode="none">
+				 <s:link view="/scsPubEventList.xhtml" value="SCS Publish Report" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none">
+				 <s:link view="/scsCharts.xhtml" value="SCS Publish Chart" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none">
+				 <s:link view="/damMTSMainEventList.xhtml" value="DAM MTS main report" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none">
+				 <s:link view="/damMTSInnerEventList.xhtml" value="DAM MTS encoding report" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none">
+				 <s:link view="/damMBEventList.xhtml" value="DAM MB report" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none" rendered="#{s:hasPermission('dql', 'read')}">
+				 <s:link view="/services/DqlStudio.xhtml" value="DQL Studio" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none" rendered="#{s:hasPermission('hosttype', 'control')}">
+				 <s:link view="/services/hostTypeControl.xhtml" value="Host Control" propagation="none"/>
+			</rich:menuItem>
+		</rich:dropDownMenu>
+        <rich:dropDownMenu  rendered="#{s:hasRole('TechOpsSRE')}">
+			<f:facet name="label">
+				<h:panelGroup>
+                       <rich:spacer style="width:1px;height:16px;" styleClass="pic"/>
+                       <h:outputText value="OpsAI Admin" />
+                   </h:panelGroup>
+               </f:facet>
+			<rich:menuItem submitMode="none" rendered="#{s:hasRole('TechOpsSRE')}">
+				<s:link view="/datamodel/serviceConfList.xhtml" value="Service Configuration" propagation="none"/>
+			</rich:menuItem>
+			<rich:menuItem submitMode="none" >
+				<s:link view="/services/cmssvc.xhtml" value="CMS Admin" propagation="none"/>
+			</rich:menuItem>
+            <rich:menuGroup value="Data Model Inventory" rendered="#{s:hasRole('TechOpsSRE')}">
+	            <rich:menuItem submitMode="none" >
+					<s:link view="/datamodel/businessEntityList.xhtml" value="Business Entity" propagation="none"/>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none" >
+					<s:link view="/datamodel/productList.xhtml" value="Product" propagation="none"/>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none" >
+					<s:link view="/datamodel/applicationList.xhtml" value="Application" propagation="none"/>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none" >
+					<s:link view="/datamodel/hostTypeList.xhtml" value="Host Type" propagation="none"/>
+				</rich:menuItem>
+				<rich:menuItem submitMode="none" >
+					<s:link view="/datamodel/appConfigList.xhtml" value="App Config" propagation="none"/>
+				</rich:menuItem>
+			</rich:menuGroup>
+
+		</rich:dropDownMenu>
+    </rich:toolBarGroup>
+    <!-- @newMenuItem@ -->
+    <rich:toolBarGroup location="right">
+        <h:outputText id="menuWelcomeId" value="signed in as: #{loggedinuser.name}" rendered="#{identity.loggedIn}"/>
+        <s:link id="menuLoginId" view="/login.xhtml" value="Login" rendered="#{not identity.loggedIn}" propagation="none"/>
+        <s:link id="menuLogoutId" view="/home.xhtml" action="#{identity.logout}" value="Logout" rendered="#{identity.loggedIn}" propagation="none"/>
+    </rich:toolBarGroup>
+</rich:toolBar>
+</h:form>
+</ui:composition>

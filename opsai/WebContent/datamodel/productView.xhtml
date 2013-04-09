@@ -1,0 +1,89 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    
+    <h:messages globalOnly="true" styleClass="message"/>
+    
+    <h:form id="productForm">
+
+        <rich:panel>
+            <f:facet name="header">product</f:facet>
+    
+            <s:decorate id="nameDecoration" template="/layout/display.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:outputText id="name" required="true"
+                             value="#{productHome.instance.name}"/>
+            </s:decorate>
+            <rich:spacer height="40" />
+            <s:decorate id="beDecoration" template="/layout/display.xhtml">
+                <ui:define name="label">Business Entity</ui:define>
+                <s:link id="be" propagation="end" 
+                     value="#{productHome.instance.businessEntity.name}" 
+                     view="/datamodel/businessEntityView.xhtml">
+                    <f:param name="businessEntityId" 
+                            value="#{productHome.instance.businessEntity.id}"/>
+                </s:link>
+            </s:decorate>
+            <rich:spacer height="40" />
+            <s:decorate id="appDecoration" template="/layout/display.xhtml">
+                <ui:define name="label">Application</ui:define>
+                <h:dataTable id="app" var="app" value="#{productHome.instance.applications}" >
+	                <h:column>
+		                <f:facet name="header">
+	                    	<h:outputText>Name</h:outputText>
+	                    </f:facet>
+	                	<s:link id="applink" propagation="end" 
+		                     value="#{app.name}" 
+		                     view="/datamodel/applicationView.xhtml">
+		                    <f:param name="applicationId" 
+		                            value="#{app.id}"/>
+		                </s:link>        
+                	</h:column>
+                	<h:column>
+		                <f:facet name="header">
+	                    	<h:outputText>HostType</h:outputText>
+	                    </f:facet>
+	                	<s:link id="hostTypelink" propagation="end" 
+		                     value="#{app.hostType.name}" 
+		                     view="/datamodel/hostTypeView.xhtml">
+		                    <f:param name="hostTypeId" 
+		                            value="#{app.hostType.id}"/>
+		                </s:link>        
+                	</h:column>
+                </h:dataTable>
+            </s:decorate>
+            
+            
+            
+            <div style="clear:both"/>
+            
+        </rich:panel>
+
+        <div class="actionButtons">
+            <s:button id="edit" 
+                          value="Edit" 
+                         view="/datamodel/product.xhtml"/>                  
+            <h:commandButton id="delete" 
+                          value="Delete" 
+                         action="#{productHome.remove}"
+                       rendered="#{productHome.managed}"/>
+            <s:button propagation="end" 
+                               id="list" 
+                            value="Back To List"
+                             view="/datamodel/productList.xhtml"/>
+        </div>
+        
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,125 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="/layout/template.xhtml">
+    <style>
+    .panel {
+        vertical-align:top;
+    }
+    </style>
+<ui:define name="body">
+	<h:form>   
+	    <rich:tabPanel switchType="client">
+	    	<rich:tab label="HostType Control">
+				<s:decorate template="/layout/edit.xhtml">
+					<ui:define name="label">HostType Selector:<s:span style="color: red;padding-left: 2px;">*</s:span></ui:define>
+					<a4j:outputPanel id="bph" ajaxRendered="true">
+					<rich:panel>
+					<h:panelGrid columns="2" border="0">
+						<rich:tree style="width:300px" switchType="client">
+			                <rich:treeNodesAdaptor nodes="#{businessEntityList}" var="root" >
+			                    <rich:treeNode><h:outputText value="root"/></rich:treeNode>
+			                    <rich:treeNodesAdaptor nodes="#{root.resultList}" var="be">
+			                        <rich:treeNode><h:outputText value="#{be.name}"/></rich:treeNode>
+			                        <rich:treeNodesAdaptor rendered="#{ruleBasedPermissionResolver.hasPermission('businessentity', 'control', be.name)}" nodes="#{be.products}" var="prod">
+			                            <rich:treeNode><h:outputText value="#{prod.name}"/></rich:treeNode>
+			                            <rich:treeNodesAdaptor nodes="#{prod.hostTypes}" var="hosttype">
+				                            <rich:treeNode>
+				                            	<a4j:commandLink reRender="bph" action="#{cmsadmin.processHostTypeSelection}">
+					                            	<f:param name="portalName" value="#{be.name}"/>
+					                            	<f:param name="productName" value="#{prod.name}"/>
+				                            		<f:param name="hosttypeName" value="#{hosttype.name}"/>
+				                            		<h:outputText value="#{hosttype.name}"/>
+				                            	</a4j:commandLink>
+				                            </rich:treeNode>
+				                        </rich:treeNodesAdaptor>
+			                        </rich:treeNodesAdaptor>
+			                    </rich:treeNodesAdaptor>
+			                </rich:treeNodesAdaptor>
+			            </rich:tree>
+			            <h:panelGroup>
+			            	
+								<s:decorate template="/layout/display.xhtml">
+								    <ui:define name="label">Business Entity:</ui:define>
+								    <h:outputText value="#{cmsadmin.portal}"/>
+								</s:decorate>
+								<s:decorate template="/layout/edit.xhtml">
+								    <ui:define name="label">Product:</ui:define>
+								    <h:outputText value="#{cmsadmin.product}"/>
+								</s:decorate>
+								<s:decorate template="/layout/edit.xhtml">
+								    <ui:define name="label">HostType:</ui:define>
+								    <h:outputText value="#{cmsadmin.hostType}"/>
+								</s:decorate>
+								<s:decorate template="/layout/edit.xhtml" >
+								    <ui:define name="label">Environment:<s:span style="color: red;padding-left: 2px;">*</s:span></ui:define>
+								    <h:selectOneMenu value="#{cmsadmin.environment}">
+						                <f:selectItem itemValue="lab" itemLabel="lab" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - OPS'))}"/>
+						                <f:selectItem itemValue="dev" itemLabel="dev" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - DEV'))}"/>
+						                <f:selectItem itemValue="devint" itemLabel="devint" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - DEV'))}"/>
+						                <f:selectItem itemValue="qa00" itemLabel="qa00" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - QA'))}"/>
+						                <f:selectItem itemValue="qa01" itemLabel="qa01" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - QA'))}"/>
+						                <f:selectItem itemValue="qa02" itemLabel="qa02" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - QA'))}"/>
+						                <f:selectItem itemValue="perf" itemLabel="perf" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - QA'))}"/>
+						                <f:selectItem itemValue="live" itemLabel="live" itemDisabled="#{!s:hasPermission('environemnt', cmsadmin.concatePortal(' - OPS'))}"/>
+						            </h:selectOneMenu>  
+								</s:decorate>
+							
+			            </h:panelGroup>
+					</h:panelGrid>
+					</rich:panel>
+					</a4j:outputPanel>
+		        </s:decorate>
+		        <s:decorate template="/layout/display.xhtml">
+		                <ui:define name="label">Action: </ui:define>
+		                <a4j:commandButton action="#{cmsadmin.hostTypeAction('query_server')}" reRender="msg,actionResult" value="Query Servers"/>
+		                <a4j:commandButton action="#{cmsadmin.hostTypeAction('start')}" reRender="msg,actionResult" value="Start"/>
+		                <a4j:commandButton action="#{cmsadmin.hostTypeAction('shutdown')}" reRender="msg,actionResult" value="Shutdown"/>
+		        </s:decorate>
+	        </rich:tab>
+	    </rich:tabPanel>
+	    <rich:spacer height="40" /> 
+		<a4j:outputPanel id="actionResult" ajaxRendered="true">
+			<rich:panel style="overflow:auto" rendered="#{cmsadmin.ocr!=null}">
+				<f:facet name="header">Action Result</f:facet>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">PAS Flow ID:</ui:define>
+					<h:outputText value="#{cmsadmin.ocr.pasId}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Target Server(s):</ui:define>
+					<h:outputText value="#{cmsadmin.ocr.affectedServers}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">Action Taken:</ui:define>
+					<h:outputText value="#{cmsadmin.actionTaken}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+					<ui:define name="label">PAS Flow Status:</ui:define>
+					<h:outputText value="#{cmsadmin.ocr.response}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+				    <ui:define name="label">Start Time:</ui:define>
+				    <h:outputText value="#{cmsadmin.ocr.startTime}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+				    <ui:define name="label">End Time:</ui:define>
+				    <h:outputText value="#{cmsadmin.ocr.endTime}"/>
+				</s:decorate>
+				<s:decorate template="/layout/display.xhtml">
+				    <ui:define name="label">Report:</ui:define>
+				    <h:outputLink value="#{cmsadmin.ocr.reportUrl}" target="_new">
+				    	<f:verbatim>Click Here</f:verbatim>		    	
+				    </h:outputLink>
+				</s:decorate>
+			</rich:panel>
+		</a4j:outputPanel>
+	</h:form>
+</ui:define> 
+</ui:composition>

@@ -1,0 +1,266 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j" 
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+	<style>
+		.alignTop {
+			vertical-align:top;
+		}
+	</style>
+
+	<h:panelGrid columns="2" border="0" columnClasses="alignTop,alignTop">
+		<h:panelGroup>
+			<rich:simpleTogglePanel label="DAM MB Event Search Filter" switchType="client" style="width:600px">
+				<h:form id="damMBEventSearch" styleClass="edit">
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Event Date</ui:define> 
+						<rich:calendar popout="true" value="#{damMBEventList.mbMin.elemEventStart}"
+							datePattern="M/dd/yy HH:mm" defaultTime="00:00" showApplyButton="false" process="ct" ajaxSingle="false"> 
+						<a4j:support event="onchanged" action="#{damMBEventList.calculateMyResultList}" reRender="results, summary"/> 
+						</rich:calendar> 
+						<h:outputText value=" - "/>
+						<rich:calendar popout="true" value="#{damMBEventList.mbMax.elemEventStart}"
+							datePattern="M/dd/yy HH:mm" defaultTime="00:00" showApplyButton="false"> 
+						<a4j:support event="onchanged" action="#{damMBEventList.calculateMyResultList}" reRender="results, summary"/> 
+						</rich:calendar> 
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+		                <ui:define name="label">Type</ui:define>
+		                <h:selectOneMenu value="#{damMBEventList.mbMin.objType}">
+			                <f:selectItem itemValue="" itemLabel="ALL"/>
+			                <f:selectItem itemValue="wbmd_cons_video" itemLabel="wbmd_cons_video"/>
+			                <f:selectItem itemValue="wbmd_cons_img" itemLabel="wbmd_cons_img"/>
+			                <a4j:support event="onchange" action="#{damMBEventList.calculateMyResultList}" reRender="results, summary"/>
+			            </h:selectOneMenu>
+		            </s:decorate>
+		            <s:decorate template="/layout/display.xhtml">
+		                <ui:define name="label">State</ui:define>
+		                <h:selectOneMenu value="#{damMBEventList.mbMin.objState}">
+			                <f:selectItem itemValue="" itemLabel="ALL"/>
+			                <f:selectItem itemValue="Active" itemLabel="Active"/>
+			                <f:selectItem itemValue="Staging" itemLabel="Staging"/>
+			                <a4j:support event="onchange" action="#{damMBEventList.calculateMyResultList}" reRender="results, summary"/>
+			            </h:selectOneMenu>
+		            </s:decorate>
+		            <h:outputText value="#{damMBEventList.myResultList.size}" style="COLOR: #ffffff;"/>	
+				</h:form>
+			</rich:simpleTogglePanel>
+		</h:panelGroup>
+		<a4j:outputPanel id="summary"> 
+		<h:panelGroup>
+			<h:panelGrid columns="4" border="0" columnClasses="alignTop,alignTop,alignTop,alignTop">
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:150px;border-style:none;">
+						<h:outputText value="Total Event" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.totalNo}" style="COLOR: #ff0000; FONT-SIZE: 40px; FONT-WEIGHT: bold;"/>
+		            </rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:300px;border-style:none;">
+						<h:outputText value="Avg time(Queue/MB Process)" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.mbAvg.queueWaiting}" style="COLOR: #ff8080; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+						<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 40px;"/>
+						<h:outputText value="#{damMBEventList.mbAvg.totalTime}" style="COLOR: #ff0080; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+		            </rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:150px;border-style:none;">
+						<h:outputText value="Image Event" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.imageNo}" style="COLOR: #0080c0; FONT-SIZE: 40px; FONT-WEIGHT: bold;"/>
+		            </rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:300px;border-style:none;">
+						<h:outputText value="Image time(Queue/MB Process)" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.imageAvg.queueWaiting}" style="COLOR: #00bbbb; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+						<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 40px;"/>
+						<h:outputText value="#{damMBEventList.imageAvg.totalTime}" style="COLOR: #0080ff; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+		            </rich:panel>
+				</h:panelGroup>
+			</h:panelGrid>
+			<h:panelGrid columns="3" border="0" columnClasses="alignTop,alignTop,alignTop">
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:150px;border-style:none;">
+						<h:outputText value="Video Event" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.videoNo}" style="COLOR: #00d270; FONT-SIZE: 40px; FONT-WEIGHT: bold;"/>
+		            </rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:300px;border-style:none;">
+						<h:outputText value="Video time(Queue/MB Process)" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.videoAvg.queueWaiting}" style="COLOR: #00d270; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+						<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 40px;"/>
+						<h:outputText value="#{damMBEventList.videoAvg.totalTime}" style="COLOR: #008040; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+		            </rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="width:400px;border-style:none;">
+						<h:outputText value="Video Time Details (CMS/Ftp/CMS)" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMBEventList.videoAvg.cmsTime1}" style="COLOR: #00bb99; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+						<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 40px;"/>
+						<h:outputText value="#{damMBEventList.videoAvg.ftpTime}" style="COLOR: #008040; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+		            	<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 40px;"/>
+						<h:outputText value="#{damMBEventList.videoAvg.cmsTime2}" style="COLOR: #00bb99; FONT-SIZE: 40px; FONT-WEIGHT: bold;">
+							<f:convertDateTime pattern="mm:ss" />
+						</h:outputText>
+		            </rich:panel>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:panelGroup>
+		</a4j:outputPanel>
+	</h:panelGrid>
+	
+	<a4j:outputPanel id="results"> 
+		<h:form id="mbResult">   
+	    	<rich:dataTable id="mbTable" var="mb" value="#{damMBEventList.myResultList}"  
+	        	rows="30" reRender="ds">
+	        	<rich:column sortBy="#{mb.objType}"> 
+	                <f:facet name="header">
+	                    <h:outputText value="Type"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.objType}"/>
+	            </rich:column> 
+	            <rich:column sortBy="#{mb.name}">
+	                <f:facet name="header">
+	                    <h:outputText value="Source Name"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.name}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.objId}">
+	                <f:facet name="header">
+	                    <h:outputText value="Object Id"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.objId}">	                
+	                	<f:convertNumber maxFractionDigits="2"/>
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.objState}">
+	                <f:facet name="header">
+	                    <h:outputText value="State"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.objState}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.putInQTime}">
+	                <f:facet name="header">
+	                    <h:outputText value="Put in Queue"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.putInQTime}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.elemEventStart}">
+	                <f:facet name="header">
+	                    <h:outputText value="MB Start"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.elemEventStart}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.elemFtpStart}">
+	                <f:facet name="header">
+	                    <h:outputText value="FTP Start"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.elemFtpStart}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.elemFtpEnd}">
+	                <f:facet name="header">
+	                    <h:outputText value="FTP End"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.elemFtpEnd}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.elemEventEnd}">
+	                <f:facet name="header">
+	                    <h:outputText value="MB End"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.elemEventEnd}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.queueWaiting}">
+	                <f:facet name="header">
+	                    <h:outputText value="Queue Wait"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.queueWaiting}"> 
+	                	<f:convertDateTime pattern="mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.totalTime}">
+	                <f:facet name="header">
+	                    <h:outputText value="MB Total"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.totalTime}"> 
+	                	<f:convertDateTime pattern="mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.cmsTime1}">
+	                <f:facet name="header">
+	                    <h:outputText value="CMS 1"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.cmsTime1}"> 
+	                	<f:convertDateTime pattern="mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.ftpTime}">
+	                <f:facet name="header">
+	                    <h:outputText value="Ftp Time"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.ftpTime}"> 
+	                	<f:convertDateTime pattern="mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mb.cmsTime2}">
+	                <f:facet name="header">
+	                    <h:outputText value="CMS 2"/>
+	                </f:facet>
+	                <h:outputText value="#{mb.cmsTime2}"> 
+	                	<f:convertDateTime pattern="mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <f:facet name="footer">
+	            	<rich:columnGroup>
+			            <rich:column colspan="15" breakBefore="true">
+						    <rich:datascroller id="ds"></rich:datascroller>
+						</rich:column>
+					</rich:columnGroup>
+				</f:facet>
+	        </rich:dataTable>
+	     </h:form>
+	</a4j:outputPanel>	
+</ui:define>
+
+</ui:composition>

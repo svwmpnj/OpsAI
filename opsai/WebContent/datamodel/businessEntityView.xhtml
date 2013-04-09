@@ -1,0 +1,62 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    
+    <h:messages globalOnly="true" styleClass="message"/>
+    
+    <h:form id="businessEntityForm">
+
+        <rich:panel>
+            <f:facet name="header">businessEntity</f:facet>
+    
+            <s:decorate id="nameDecoration" template="/layout/display.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:outputText id="name" required="true"
+                             value="#{businessEntityHome.instance.name}"/>
+            </s:decorate>
+            <rich:spacer height="40" />
+            <s:decorate id="productDecoration" template="/layout/display.xhtml">
+                <ui:define name="label">Product</ui:define>
+                <h:dataTable id="product" var="product" value="#{businessEntityHome.instance.products}" >
+	                <h:column>
+	                	<s:link id="productlink" propagation="end" 
+		                     value="#{product.name}" 
+		                     view="/datamodel/productView.xhtml">
+		                    <f:param name="productId" 
+		                            value="#{product.id}"/>
+		                </s:link>        
+                	</h:column>
+                </h:dataTable>
+            </s:decorate>
+            <div style="clear:both"/>
+            
+        </rich:panel>
+
+        <div class="actionButtons">
+            <s:button id="edit" 
+                          value="Edit" 
+                         view="/datamodel/businessEntity.xhtml"/>                  
+            <h:commandButton id="delete" 
+                          value="Delete" 
+                         action="#{businessEntityHome.remove}"
+                       rendered="#{businessEntityHome.managed}"/>
+            <s:button propagation="end" 
+                               id="list" 
+                            value="Back To List"
+                             view="/datamodel/businessEntityList.xhtml"/>
+        </div>
+        
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>
+

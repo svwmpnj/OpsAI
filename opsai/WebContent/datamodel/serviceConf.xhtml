@@ -1,0 +1,78 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="serviceConfForm">
+
+        <rich:panel>
+            <f:facet name="header">serviceConf</f:facet>
+
+            <s:decorate id="serviceNameDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Service Name</ui:define>
+                <h:inputText id="serviceName" required="true"
+                             value="#{serviceConfHome.instance.serviceName}"/>
+            </s:decorate>
+            <s:decorate id="serviceCDDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Service Code</ui:define>
+                <h:inputText id="serviceCD" required="true"
+                             value="#{serviceConfHome.instance.serviceCD}"/>
+            </s:decorate>
+            <s:decorate id="adminIDDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Admin ID</ui:define>
+                <h:inputText id="adminID" required="false"
+                             value="#{serviceConfHome.instance.adminID}" style=" width : 300px;"/>
+            </s:decorate>
+            <s:decorate id="adminPWDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Admin Password</ui:define>
+                <h:inputText id="adminPW" required="false"
+                             value="#{serviceConfHome.instance.adminPW}"/>
+            </s:decorate>
+            <s:decorate id="serviceURLDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Service URL</ui:define>
+                <h:inputText id="serviceURL" required="false"
+                             value="#{serviceConfHome.instance.serviceURL}" style=" width : 300px;"/>
+            </s:decorate>
+            <s:decorate id="instructionDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Instruction</ui:define>
+                <h:inputTextarea id="instruction" required="false"
+                             value="#{serviceConfHome.instance.instruction}" style=" width : 300px; height : 100px;"/>
+            </s:decorate>
+            
+            <div style="clear:both"/>
+            <div style="clear:both"/>
+
+        </rich:panel>
+
+        <div class="actionButtons">
+            <h:commandButton id="save"
+                          value="Save"
+                         action="#{serviceConfHome.persist}"
+                       rendered="#{!serviceConfHome.managed}"/>
+            <h:commandButton id="update"
+                          value="Save"
+                         action="#{serviceConfHome.update}"
+                       rendered="#{serviceConfHome.managed}"/>
+            <h:commandButton id="delete"
+                          value="Delete"
+                         action="#{serviceConfHome.remove}"
+                      immediate="true"
+                       rendered="#{serviceConfHome.managed}"/>
+            <s:button propagation="end"
+                               id="done"
+                            value="Done"
+                             view="/datamodel/serviceConfList.xhtml"/>
+        </div>
+
+    </h:form>
+
+</ui:define>
+
+</ui:composition>

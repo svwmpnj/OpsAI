@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd"
+	version="5">
+
+	<display-name>opsai-ear</display-name>
+
+	<module>
+		<web>
+			<web-uri>opsai.war</web-uri>
+			<context-root>/opsai</context-root>
+		</web>
+	</module>
+
+	<module>
+		<ejb>opsai-ejb.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>jboss-seam.jar</ejb>
+	</module>
+	<module>
+		<ejb>dfc.jar</ejb>
+	</module>
+	<module>
+		<ejb>dfcbase.jar</ejb>
+	</module>
+	<module>
+		<ejb>RSFlowInvoke.jar</ejb>
+	</module>
+	<module>
+		<ejb>ContentCommons.jar</ejb>
+	</module>
+</application>

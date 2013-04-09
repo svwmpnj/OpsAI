@@ -1,0 +1,61 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    template="/layout/template.xhtml">
+
+<ui:define name="body">
+
+    <rich:panel>
+        <f:facet name="header">appConfigList</f:facet>
+
+        <div class="results">
+
+            <h:outputText value="No appConfig exists"
+                       rendered="#{empty appConfigList.resultList}"/>
+
+            <h:dataTable id="appConfigList" var="appConfig"
+                      value="#{appConfigList.resultList}"
+                   rendered="#{not empty appConfigList.resultList}">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{appConfig.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Key</f:facet>
+                    <s:link id="appConfig"
+                         value="#{appConfig.key}"
+                   propagation="none"
+                         view="/datamodel/appConfig.xhtml">
+                        <f:param name="appConfigId"
+                                value="#{appConfig.id}"/>
+                    </s:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Application</f:facet>
+                    <s:link id="application" 
+                         value="#{appConfig.application.name}" 
+                         view="/datamodel/applicationView.xhtml">
+                        <f:param name="applicationId" 
+                                value="#{appConfig.application.id}"/>
+                    </s:link>
+                </h:column>
+            </h:dataTable>
+
+        </div>
+
+    </rich:panel>
+
+    <div class="actionButtons">
+        <s:button id="done"
+               value="Create appConfig"
+                view="/datamodel/appConfig.xhtml"/>
+    </div>
+
+</ui:define>
+
+</ui:composition>

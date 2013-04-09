@@ -1,0 +1,557 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.com/products/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j" 
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+	<style>
+		.alignTop {
+			vertical-align:top;
+		}
+	</style>
+
+	<h:panelGrid columns="2" border="0" columnClasses="alignTop,alignTop">
+		<h:panelGroup>		
+			<rich:simpleTogglePanel label="DAM MTS Encoding Event Search Filter" switchType="client" style="width:600px">
+				<h:form id="damMTSInnerEventSearch" styleClass="edit">
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Event Date</ui:define> 
+						<rich:calendar popout="true" value="#{damMTSInnerEventList.innerEventMin.itemEventStart}"
+							datePattern="M/dd/yy HH:mm" defaultTime="00:00" showApplyButton="false" process="ct" ajaxSingle="false"> 
+						<a4j:support event="onchanged" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/> 
+						</rich:calendar> 
+						<h:outputText value=" - "/>
+						<rich:calendar popout="true" value="#{damMTSInnerEventList.innerEventMax.itemEventStart}"
+							datePattern="M/dd/yy HH:mm" defaultTime="00:00" showApplyButton="false"> 
+						<a4j:support event="onchanged" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/> 
+						</rich:calendar> 
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+		                <ui:define name="label">Status</ui:define>
+		                <h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.tlsStatus}">
+			                <f:selectItem itemValue="" itemLabel="ALL"/>
+			                <f:selectItem itemValue="Complete" itemLabel="Complete"/>
+			                <f:selectItem itemValue="Incomplete" itemLabel="Incomplete"/>
+			                <a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+			            </h:selectOneMenu>
+		            </s:decorate>
+		            <s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Size (MB)</ui:define> 
+						<h:inputText value="#{damMTSInnerEventList.innerEventMin.videoSize}">
+		                	<a4j:support event="onblur" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:inputText>
+						<h:outputText value=" - "/>
+						<h:inputText value="#{damMTSInnerEventList.innerEventMax.videoSize}">
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:inputText>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Duration</ui:define> 
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.videoDuration}" required="false">
+							<f:selectItem itemValue="0" itemLabel="Select"/>
+							<f:selectItem itemValue="60000" itemLabel="1 min"/><f:selectItem itemValue="120000" itemLabel="2 min"/>
+							<f:selectItem itemValue="180000" itemLabel="3 min"/><f:selectItem itemValue="240000" itemLabel="4 min"/>
+							<f:selectItem itemValue="300000" itemLabel="5 min"/><f:selectItem itemValue="600000" itemLabel="10 min"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+						<h:outputText value=" - "/>
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMax.videoDuration}" required="false">
+		                	<f:selectItem itemValue="0" itemLabel="Select"/>
+		                	<f:selectItem itemValue="60000" itemLabel="1 min"/><f:selectItem itemValue="120000" itemLabel="2 min"/>
+							<f:selectItem itemValue="180000" itemLabel="3 min"/><f:selectItem itemValue="240000" itemLabel="4 min"/>
+							<f:selectItem itemValue="300000" itemLabel="5 min"/><f:selectItem itemValue="600000" itemLabel="10 min"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">WxH</ui:define> 
+						<h:selectOneMenu value="#{damMTSInnerEventList.widthxheight}" required="false">
+							<f:selectItem itemValue="ALL"/><f:selectItem itemValue="1920x1080"/><f:selectItem itemValue="1280x720"/><f:selectItem itemValue="1024x768"/><f:selectItem itemValue="853x486"/>
+							<f:selectItem itemValue="720x402"/><f:selectItem itemValue="640x480"/><f:selectItem itemValue="640x360"/><f:selectItem itemValue="426x240"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Codec(Video/Audio)</ui:define> 
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.VCodec}" required="false">
+							<f:selectItem itemValue="" itemLabel="ALL"/>
+							<f:selectItem itemValue="Apple ProRes 422"/><f:selectItem itemValue="Apple ProRes 422 (HQ)"/>
+							<f:selectItem itemValue="H.264"/><f:selectItem itemValue="XDCAM HD 1080p30 (35 Mb/s VBR)"/>
+							<f:selectItem itemValue="XDCAM HD422 1080p30 (50 Mb/s)"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+						<h:outputText value=" / "/>
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.ACodec}" required="false">
+		                	<f:selectItem itemValue="" itemLabel="ALL"/>
+		                	<f:selectItem itemValue="AAC"/><f:selectItem itemValue="Integer (Big Endian)"/>
+							<f:selectItem itemValue="Integer (Little Endian)"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/edit.xhtml"> 
+						<ui:define name="label">Format x Rendition</ui:define> 
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.itemFormat}" required="false">
+							<f:selectItem itemValue="" itemLabel="ALL"/>
+							<f:selectItem itemValue="f4v"/><f:selectItem itemValue="flv"/>
+							<f:selectItem itemValue="mp4"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+						<h:outputText value=" x "/>
+						<h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.itemRendition}" required="false">
+		                	<f:selectItem itemValue="" itemLabel="ALL"/>
+		                	<f:selectItem itemValue="low"/><f:selectItem itemValue="med"/>
+							<f:selectItem itemValue="high"/><f:selectItem itemValue="na"/>
+		                	<a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+		                </h:selectOneMenu>
+					</s:decorate>
+					<s:decorate template="/layout/display.xhtml">
+		                <ui:define name="label">Host</ui:define>
+		                <h:selectOneMenu value="#{damMTSInnerEventList.innerEventMin.mtsHost}">
+			                <f:selectItem itemValue="" itemLabel="ALL"/>
+			                <f:selectItem itemValue="01l" itemLabel="dmmts01l"/>
+			                <f:selectItem itemValue="02l" itemLabel="dmmts02l"/>
+			                <f:selectItem itemValue="03l" itemLabel="dmmts03l"/>
+			                <f:selectItem itemValue="04l" itemLabel="dmmts04l"/>
+			                <a4j:support event="onchange" action="#{damMTSInnerEventList.calculateMyResultList}" reRender="results, summary"/>
+			            </h:selectOneMenu>
+		            </s:decorate>
+					<h:outputText value="#{damMTSInnerEventList.myResultList.size}" style="COLOR: #ffffff;"/>
+				</h:form>	   		
+			</rich:simpleTogglePanel>
+		</h:panelGroup>
+		
+		<a4j:outputPanel id="summary"> 
+		<h:panelGroup>
+			<h:panelGrid columns="3" border="0" columnClasses="alignTop,alignTop,alignTop">
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:250px;width:300px;border-style:none;">
+						<h:outputText value="Complete / Total Tasks" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.completeNo}" style="COLOR: #00d270; FONT-SIZE: 50px; FONT-WEIGHT: bold;"/>
+						<h:outputText value=" / " style="COLOR: #808080; FONT-WEIGHT: bold; FONT-SIZE: 50px;"/>
+						<h:outputText value="#{damMTSInnerEventList.totalNo}" style="COLOR: #008040; FONT-SIZE: 50px; FONT-WEIGHT: bold;"/>
+		               	<br/><br/>
+		               	<h:outputText value="FlipFactory encoding wait" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.innerEventAvg.flipWaitTime}" style="COLOR: #808080; FONT-SIZE: 50px; FONT-WEIGHT: bold;">
+		               		<f:convertDateTime pattern="HH:mm:ss" />
+		               	</h:outputText>
+					</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:250px;width:300px;border-style:none;">
+						<h:outputText value="Complete Rate" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.completeNo/damMTSInnerEventList.totalNo}" style="FONT-SIZE: 50px; COLOR: #00d270; FONT-WEIGHT: bold;">
+		               		<f:convertNumber pattern="##.##%" />
+		               	</h:outputText>
+		               	<br/><br/>
+		               	<h:outputText value="FlipFactory encoding time" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.innerEventAvg.encodingTime}" style="COLOR: #808080; FONT-SIZE: 50px; FONT-WEIGHT: bold;">
+		               		<f:convertDateTime pattern="HH:mm:ss" />
+		               	</h:outputText>
+					</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+					<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:250px;width:300px;border-style:none;">
+						<h:outputText value="MTS task wait" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.innerEventAvg.innerWaitTime}" style="COLOR: #808080; FONT-SIZE: 50px; FONT-WEIGHT: bold;">
+		               		<f:convertDateTime pattern="HH:mm:ss" />
+		               	</h:outputText>
+		               	<br/><br/>
+		               	<h:outputText value="FlipFactory total time" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+						<br/><rich:separator height="2" lineType="dotted"/><br/>
+						<h:outputText value="#{damMTSInnerEventList.innerEventAvg.innerTotalTime}" style="FONT-SIZE: 50px; COLOR: #0080ff; FONT-WEIGHT: bold;">
+		               		<f:convertDateTime pattern="HH:mm:ss" />
+		               	</h:outputText>
+					</rich:panel>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:panelGroup>
+		</a4j:outputPanel>		
+	</h:panelGrid>	
+	
+	<a4j:outputPanel id="results"> 
+		<h:form id="mtsiResult">   
+		<rich:tabPanel switchType="client"> 
+			<rich:tab label="Detail">   
+	    	<rich:dataTable id="mtsInnerTable" var="mtsi" value="#{damMTSInnerEventList.myResultList}"  
+	        	rows="30" reRender="ds">
+	        	<rich:column sortBy="#{mtsi.name}"> 
+	                <f:facet name="header">
+	                    <h:outputText value="Source Name"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.name}"/>
+	            </rich:column> 
+	            <rich:column sortBy="#{mtsi.srcObjId}">
+	                <f:facet name="header">
+	                    <h:outputText value="Object Id"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.srcObjId}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.videoSize}">
+	                <f:facet name="header">
+	                    <h:outputText value="Size (MB)"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.videoSize}">	                
+	                	<f:convertNumber maxFractionDigits="2"/>
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.videoDuration}">
+	                <f:facet name="header">
+	                    <h:outputText value="Duration"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.videoDuration}">	                
+	                	<f:convertDateTime pattern="HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.itemFormat}">
+	                <f:facet name="header">
+	                    <h:outputText value="Format"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.itemFormat}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.itemRendition}">
+	                <f:facet name="header">
+	                    <h:outputText value="Rendition"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.itemRendition}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.FWidth}">
+	                <f:facet name="header">
+	                    <h:outputText value="Width"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.FWidth}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.FHeight}">
+	                <f:facet name="header">
+	                    <h:outputText value="Height"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.FHeight}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.VCodec}">
+	                <f:facet name="header">
+	                    <h:outputText value="V Codec"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.VCodec}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.ACodec}">
+	                <f:facet name="header">
+	                    <h:outputText value="A Codec"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.ACodec}"/>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.parent.mtsMainStartTime}">
+	                <f:facet name="header">
+	                    <h:outputText value="Parent Start"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.parent.mtsMainStartTime}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.itemEventStart}">
+	                <f:facet name="header">
+	                    <h:outputText value="Task Start"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.itemEventStart}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.flipFirstStatusDate}">
+	                <f:facet name="header">
+	                    <h:outputText value="Encoding Start"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.flipFirstStatusDate}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.itemEventEnd}">
+	                <f:facet name="header">
+	                    <h:outputText value="Task End"/>
+	                </f:facet>
+	                <h:outputText value="#{mtsi.itemEventEnd}"> 
+	                	<f:convertDateTime timeZone="America/New_York" pattern="MM/dd HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.innerWaitTime}">
+	                <f:facet name="header">
+	                	<h:outputText value="Task wait"/> 
+	                </f:facet>
+	                <h:outputText value="#{mtsi.innerWaitTime}"> 
+	                	<f:convertDateTime pattern="HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.flipWaitTime}">
+	                <f:facet name="header">
+	                	<h:outputText value="Encoding wait"/> 
+	                </f:facet>
+	                <h:outputText value="#{mtsi.flipWaitTime}"> 
+	                	<f:convertDateTime pattern="HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.encodingTime}">
+	                <f:facet name="header">
+	                	<h:outputText value="Encoding Time"/> 
+	                </f:facet>
+	                <h:outputText value="#{mtsi.encodingTime}"> 
+	                	<f:convertDateTime pattern="HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.innerTotalTime}">
+	                <f:facet name="header">
+	                	<h:outputText value="Total Task Time"/> 
+	                </f:facet>
+	                <h:outputText value="#{mtsi.innerTotalTime}"> 
+	                	<f:convertDateTime pattern="HH:mm:ss" />
+	                </h:outputText>
+	            </rich:column>
+	            <rich:column sortBy="#{mtsi.tlsStatus}">
+	                <f:facet name="header">
+	                	<h:outputText value="Status"/> 
+	                </f:facet>
+	                <h:outputText value="#{mtsi.tlsStatus}"/>
+	            </rich:column>
+	            <f:facet name="footer">
+	            	<rich:columnGroup>
+			            <rich:column colspan="17" breakBefore="true">
+						    <rich:datascroller id="ds"></rich:datascroller>
+						</rich:column>
+					</rich:columnGroup>
+				</f:facet>
+	        </rich:dataTable>
+	        </rich:tab>
+			<rich:tab label="Break-downs">
+			<h:panelGrid columns="5" border="0" columnClasses="alignTop,alignTop,alignTop,alignTop,alignTop">
+				<h:panelGroup>
+				<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:750px;width:300px;border-style:none;">
+					<h:outputText value="Format" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.formatMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Format"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+					<br/><br/>
+					<h:outputText value="Rendition" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.renditionMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Rendition"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+				<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:750px;width:300px;border-style:none;">
+					<h:outputText value="Video Codec" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.VCodecMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Video Codec"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+					<br/><br/>
+					<h:outputText value="Audio Codec" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.ACodecMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Audio Codec"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+				<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:750px;width:300px;border-style:none;">
+					<h:outputText value="Width x Height" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.wxhMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="WxH"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+				<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:750px;width:300px;border-style:none;">
+					<h:outputText value="Video Size" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.sizeMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Size(Gb)"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				</h:panelGroup>
+				<h:panelGroup>
+				<rich:panel bodyClass="rich-laguna-panel-no-header" style="height:750px;width:300px;border-style:none;">
+					<h:outputText value="Video Duration" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.durationMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="Duration"/> 
+							</f:facet>
+							<h:outputText value="#{map['groupkey']}">
+								<f:convertDateTime pattern="m" />
+							</h:outputText><h:outputText value=" min~"/> 
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+					<br/><br/>
+					<h:outputText value="MTS Host" style="FONT-WEIGHT: bold; FONT-SIZE: large; COLOR: #808080;"/>
+					<br/><rich:separator height="2" lineType="dotted"/><br/>
+					<rich:dataTable var="map" value="#{damMTSInnerEventList.hostMap}">
+						<rich:column sortBy="#{map['groupkey']}">
+							<f:facet name="header">
+								<h:outputText value="MTS Host"/> 
+							</f:facet>
+							<h:outputText value="dmmts#{map['groupkey']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['count']}">
+							<f:facet name="header">
+								<h:outputText value="#"/> 
+							</f:facet>
+							<h:outputText value="#{map['count']}"/>
+						</rich:column>
+						<rich:column sortBy="#{map['encodingTime']}">
+							<f:facet name="header">
+								<h:outputText value="Encoding Time"/> 
+							</f:facet>
+							<h:outputText value="#{map['encodingTime']}">
+								<f:convertDateTime pattern="HH:mm:ss" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+				</rich:panel>
+				</h:panelGroup>
+			</h:panelGrid>
+			</rich:tab> 
+	     </rich:tabPanel>
+	     </h:form>
+	</a4j:outputPanel>	
+</ui:define>
+
+</ui:composition>

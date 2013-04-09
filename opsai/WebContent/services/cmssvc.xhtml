@@ -1,0 +1,66 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                template="/layout/template.xhtml">
+    <style>
+    .panel {
+        vertical-align:top;
+    }
+    </style>
+<ui:define name="body">
+	<h:form>   
+	    <rich:tabPanel switchType="client">
+	        <rich:tab label="Consumer CMS">
+	            <a4j:form id="QAForm">
+					<s:decorate id="cDecoration" template="/layout/display.xhtml">
+			                <ui:define name="label">Consumer: </ui:define>
+			                <a4j:commandButton action="#{cmsadmin.consRestart}" reRender="msg" value="Restart"/>
+			        </s:decorate>
+			        <s:decorate id="pDecoration" template="/layout/display.xhtml">
+			                <ui:define name="label">Professional: </ui:define>
+			                <a4j:commandButton action="#{cmsadmin.profRestart}" reRender="msg" value="Restart"/>
+			        </s:decorate>
+			        <s:decorate template="/layout/display.xhtml">
+			                <ui:define name="label">Professional logs: </ui:define>
+			                <a4j:commandButton action="#{cmsadmin.moveLogs}" reRender="msg" value="Move">
+			                	<f:param name="docbaseName" value="professionaldmcs"/>
+			                </a4j:commandButton>
+			                <a4j:commandButton action="#{cmsadmin.processSCSLogs}" reRender="msg" value="Parse">
+			                	<f:param name="folderName" value="professionaldmcs"/>
+			                </a4j:commandButton>
+			        </s:decorate>
+			        <s:decorate template="/layout/display.xhtml">
+			                <ui:define name="label">Consumer logs: </ui:define>
+			                <a4j:commandButton action="#{cmsadmin.moveLogs}" reRender="msg" value="Move">
+			                	<f:param name="docbaseName" value="consumerdmcs"/>
+			                </a4j:commandButton>
+			                <a4j:commandButton action="#{cmsadmin.processSCSLogs}" reRender="msg" value="Parse">
+			                	<f:param name="folderName" value="consumerdmcs"/>
+			                </a4j:commandButton>
+			        </s:decorate>
+			        <s:decorate template="/layout/display.xhtml">
+			                <ui:define name="label">MTS logs: </ui:define>
+			                <rich:calendar popout="true" value="#{damMTSMainEventList.mainEventMin.mtsMainStartTime}"
+								datePattern="yyyy-M-dd" defaultTime="00:00" showApplyButton="false"> 
+							<a4j:support event="onchanged" action="#{damMTSMainEventList.processMTSLogs1}"/> 
+							</rich:calendar> 
+			        </s:decorate>
+			        <s:decorate template="/layout/display.xhtml">
+			                <ui:define name="label">MB logs: </ui:define>
+			                <rich:calendar popout="true" value="#{damMBEventList.mbMin.elemEventStart}"
+								datePattern="yyyy-M-dd" defaultTime="00:00" showApplyButton="false"> 
+							<a4j:support event="onchanged" action="#{damMBEventList.processMBLogs}"/> 
+							</rich:calendar>
+			        </s:decorate>
+				</a4j:form>    
+	        </rich:tab>
+	    </rich:tabPanel>
+	</h:form>
+</ui:define> 
+</ui:composition>

@@ -1,0 +1,56 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    
+    <h:messages globalOnly="true" styleClass="message"/>
+    
+    <h:form id="productForm">
+
+        <rich:panel>
+            <f:facet name="header">product</f:facet>
+    
+            <s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:inputText id="name" required="true"
+                             value="#{productHome.instance.name}"/>
+            </s:decorate>
+            <s:decorate id="beDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Business Entity</ui:define> 
+                <h:selectOneMenu id="businessEntitySelect" required="true"
+                		value="#{productHome.instance.businessEntity}">
+               		<s:selectItems value="#{businessEntityList}" var="businessEntuty" label="#{businessEntuty.name}" noSelectionLabel="Select Business Entuty" />
+               		<s:convertEntity />
+               	</h:selectOneMenu>   
+			</s:decorate>
+            <div style="clear:both"/>
+            
+        </rich:panel>
+
+        <div class="actionButtons">
+            <h:commandButton id="create" 
+                          value="Create" 
+                         action="#{productHome.persist}"
+                       rendered="#{!productHome.managed}"/>                   
+            <h:commandButton id="update" 
+                          value="Update" 
+                         action="#{productHome.update}"
+                       rendered="#{productHome.managed}"/>
+            <s:button id="done" 
+                            value="Done"
+                             view="/datamodel/productView.xhtml"/>
+        </div>
+        
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>
+

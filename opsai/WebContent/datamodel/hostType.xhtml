@@ -1,0 +1,61 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.ajax4jsf.org/rich"
+                template="/layout/template.xhtml">
+                       
+<ui:define name="body">
+    
+    <h:messages globalOnly="true" styleClass="message"/>
+    
+    <h:form id="hostTypeForm">
+
+        <rich:panel>
+            <f:facet name="header">hostType</f:facet>
+    
+            <s:decorate id="nameDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Name</ui:define>
+                <h:inputText id="name" required="true"
+                             value="#{hostTypeHome.instance.name}"/>
+            </s:decorate>
+            <s:decorate id="beDecoration" template="/layout/edit.xhtml">
+                <ui:define name="label">Business Entity</ui:define> 
+                <h:selectOneMenu id="businessEntitySelect" required="true"
+                		value="#{hostTypeHome.instance.businessEntity}">
+               		<s:selectItems value="#{businessEntityList}" var="businessEntity" label="#{businessEntity.name}" noSelectionLabel="Select Business Entity" />
+               		<s:convertEntity />
+               	</h:selectOneMenu>   
+			</s:decorate>
+            <div style="clear:both"/>
+            
+        </rich:panel>
+
+        <div class="actionButtons">
+            <h:commandButton id="save" 
+                          value="Save" 
+                         action="#{hostTypeHome.persist}"
+                       rendered="#{!hostTypeHome.managed}"/>                   
+            <h:commandButton id="update" 
+                          value="Save" 
+                         action="#{hostTypeHome.update}"
+                       rendered="#{hostTypeHome.managed}"/>                  
+            <h:commandButton id="delete" 
+                          value="Delete" 
+                         action="#{hostTypeHome.remove}"
+                       rendered="#{hostTypeHome.managed}"/>
+            <s:button propagation="end" 
+                               id="done" 
+                            value="Done"
+                             view="/datamodel/hostTypeList.xhtml"/>
+        </div>
+        
+    </h:form>
+    
+</ui:define>
+
+</ui:composition>
+
